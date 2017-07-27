@@ -78,7 +78,11 @@ class WaTor:
         return (self.creatures < 0).sum()
 
     def move_fish(self):
-        ...
+        for ij in self.cells():
+            if self.is_fish(*ij):
+                ...
+
+                self.creatures[ij] += 1
 
     def move_sharks(self):
         for ij in self.cells():
@@ -86,6 +90,7 @@ class WaTor:
                 ...
 
                 self.energies[ij] -= 1
+                self.creatures[ij] -= 1
 
     def remove_dead_sharks(self):
         for ij in self.cells():

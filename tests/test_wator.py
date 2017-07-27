@@ -97,5 +97,8 @@ def test_nonsense():
         WaTor(creatures, energies=numpy.zeros((8, 8)),
               energy_initial=8)
 
+    with pytest.raises(ValueError):
+        WaTor(shape=(8, 8), nsharks=20, nfish=1000)
+
     with pytest.raises(TypeError):
         WaTor(shape=(8, 8), nsharks=20, nfish='nope')

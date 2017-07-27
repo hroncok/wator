@@ -18,9 +18,13 @@ class WaTor:
                                                nfish, nsharks)
 
         self.energies = self.create_energies(energy_initial, energies,
-                                             self.creatures.shape)
+                                             self.shape)
 
         self.energy_eat = int(energy_eat)
+
+    @property
+    def shape(self):
+        return self.creatures.shape
 
     def create_creatures(self, creatures, shape, nfish, nsharks):
         if isinstance(creatures, numpy.ndarray):
@@ -72,3 +76,38 @@ class WaTor:
 
     def count_sharks(self):
         return (self.creatures < 0).sum()
+
+    def move_fish(self):
+        ...
+
+    def move_sharks(self):
+        for ij in self.cells():
+            if self.is_shark(*ij):
+                ...
+
+                self.energies[ij] -= 1
+
+    def remove_dead_sharks(self):
+        for ij in self.cells():
+            if self.is_shark(*ij) and self.is_dead(*ij):
+                self.creatures[ij] = 0
+
+    def is_fish(self, i, j):
+        return self.creatures[i, j] > 0
+
+    def is_shark(self, i, j):
+        return self.creatures[i, j] < 0
+
+    def is_dead(self, i, j):
+        return self.energies[i, j] <= 0
+
+    def cells(self):
+        for i in range(self.shape[0]):
+            for j in range(self.shape[1]):
+                yield i, j
+
+    def tick(self):
+        self.move_fish()
+        self.move_sharks()
+        self.remove_dead_sharks()
+        return self

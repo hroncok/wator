@@ -4,7 +4,7 @@ import pytest
 from wator import WaTor
 
 
-def test_init_creatures():
+def test_creatures():
     creatures = numpy.zeros((8, 8))
     creatures[2, 4] = 3
     creatures[1, :] = -5
@@ -15,7 +15,7 @@ def test_init_creatures():
     assert wator.count_sharks() == 8
 
 
-def test_init_shape():
+def test_shape():
     shape = (16, 16)
     wator = WaTor(shape=shape, nfish=16, nsharks=4)
     print(wator.creatures)
@@ -25,7 +25,7 @@ def test_init_shape():
     assert ((wator.creatures >= -10) & (wator.creatures <= 5)).all()
 
 
-def test_init_shape_custom_age():
+def test_shape_custom_age():
     shape = (16, 16)
     age_fish = 2
     age_shark = 20

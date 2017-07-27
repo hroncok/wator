@@ -8,7 +8,7 @@ AGE_SHARK = 10
 
 
 class WaTor:
-    def __init__(self, *, creatures=None, shape=None,
+    def __init__(self, creatures=None, *, shape=None,
                  nfish=None, nsharks=None,
                  age_fish=AGE_FISH, age_shark=AGE_SHARK,
                  energy_initial=None, energies=None, energy_eat=ENERGY_EAT):

@@ -8,7 +8,7 @@ def test_init_creatures():
     creatures = numpy.zeros((8, 8))
     creatures[2, 4] = 3
     creatures[1, :] = -5
-    wator = WaTor(creatures=creatures)
+    wator = WaTor(creatures)
     print(wator.creatures)
     assert (creatures == wator.creatures).all()
     assert wator.count_fish() == 1
@@ -44,7 +44,7 @@ def test_energy_initial_default():
     shape = (8, 8)
     creatures = numpy.zeros(shape)
     creatures[1, :] = -5
-    wator = WaTor(creatures=creatures)
+    wator = WaTor(creatures)
     print(wator.creatures)
     print(wator.energies)
     assert wator.energies.shape == shape
@@ -55,7 +55,7 @@ def test_energy_initial_custom():
     shape = (8, 8)
     creatures = numpy.zeros(shape)
     creatures[1, :] = -5
-    wator = WaTor(creatures=creatures, energy_initial=12)
+    wator = WaTor(creatures, energy_initial=12)
     print(wator.creatures)
     print(wator.energies)
     assert wator.energies.shape == shape
@@ -69,7 +69,7 @@ def test_energies():
     creatures[1, :] = -5
     for i in range(8):
         energies[1, i] = i
-    wator = WaTor(creatures=creatures, energies=energies)
+    wator = WaTor(creatures, energies=energies)
     print(wator.creatures)
     print(wator.energies)
     assert (wator.energies[1, :] == energies[1, :]).all()
@@ -79,22 +79,22 @@ def test_nonsense():
     creatures = numpy.zeros((8, 8))
 
     with pytest.raises(ValueError):
-        WaTor(creatures=creatures, nfish=20)
+        WaTor(creatures, nfish=20)
 
     with pytest.raises(ValueError):
-        WaTor(creatures=creatures, nsharks=20)
+        WaTor(creatures, nsharks=20)
 
     with pytest.raises(ValueError):
-        WaTor(creatures=creatures, shape=(8, 8))
+        WaTor(creatures, shape=(8, 8))
 
     with pytest.raises(ValueError):
         WaTor(shape=(8, 8), nsharks=20)
 
     with pytest.raises(ValueError):
-        WaTor(creatures=creatures, energies=numpy.zeros((6, 6)))
+        WaTor(creatures, energies=numpy.zeros((6, 6)))
 
     with pytest.raises(ValueError):
-        WaTor(creatures=creatures, energies=numpy.zeros((8, 8)),
+        WaTor(creatures, energies=numpy.zeros((8, 8)),
               energy_initial=8)
 
     with pytest.raises(TypeError):

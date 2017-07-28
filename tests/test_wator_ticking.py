@@ -69,3 +69,13 @@ def test_without_sharks_fish_overbreed():
         wator.tick()
         assert wator.count_fish() >= nfish
         nfish = wator.count_fish()
+
+
+def test_fish_move_over_border():
+    creatures = numpy.zeros((2048, 16))
+    creatures[:, 0] = 1
+    wator = WaTor(creatures)
+    wator.tick()
+    # warning: theoretically this might not happen,
+    # but statistically it will happen
+    assert wator.creatures[:, -1].any()

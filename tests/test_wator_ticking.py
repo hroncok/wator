@@ -59,3 +59,13 @@ def test_shark_prefers_fish():
     assert wator.creatures[0, 1] == 0
     assert wator.creatures[0, 2] == -2
     assert wator.energies[0, 2] == 5 - 1 + 3  # initial - 1 + eat
+
+
+def test_without_sharks_fish_overbreed():
+    nfish = 16
+    wator = WaTor(shape=(32, 8), nsharks=0, nfish=nfish)
+    assert wator.count_fish() == nfish
+    while wator.count_fish() < wator.creatures.size:
+        wator.tick()
+        assert wator.count_fish() >= nfish
+        nfish = wator.count_fish()

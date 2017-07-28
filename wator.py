@@ -56,20 +56,25 @@ class WaTor:
                 numpy.random.randint(shape[1]))
 
     def random_population(self, shape, nfish, nsharks):
-        creatures = numpy.zeros(shape, dtype=numpy.int8)
-        if (nfish + nsharks) > creatures.size:
+        c = numpy.zeros(shape, dtype=numpy.int8)
+        empties = c.size - nfish - nsharks
+        if empties < 0:
             raise ValueError('too many creatures for small shape')
-        while nfish > 0 or nsharks > 0:
-            cell = self.random_cell(shape)
-            while creatures[cell] != 0:
-                cell = self.random_cell(shape)
-            if nfish > 0:
-                creatures[cell] = numpy.random.randint(1, self.age_fish + 1)
-                nfish -= 1
-            else:
-                creatures[cell] = -numpy.random.randint(1, self.age_shark + 1)
-                nsharks -= 1
-        return creatures
+        for i in range(shape[0]):
+            for j in range(shape[1]):
+                rand = numpy.random.randint(empties + nfish + nsharks)
+                if rand < empties:
+                    empties -= 1
+                elif rand < empties + nfish:
+                    c[i, j] = numpy.random.randint(1, self.age_fish + 1)
+                    nfish -= 1
+                else:
+                    c[i, j] = -numpy.random.randint(1, self.age_shark + 1)
+                    nsharks -= 1
+        assert not empties
+        assert not nfish
+        assert not nsharks
+        return c
 
     @classmethod
     def create_energies(cls, energy_initial, energies, shape):

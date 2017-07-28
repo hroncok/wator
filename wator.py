@@ -140,7 +140,6 @@ class WaTor:
 
             if creature == SHARK:
                 self.energies[target] = self.energies[i, j]
-                print(self.energies[target])
                 if is_fish:
                     self.energies[target] += self.energy_eat
         else:

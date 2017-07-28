@@ -2,9 +2,11 @@ import numpy
 
 
 ENERGY_INITIAL = 5
-ENERGY_EAT = 1
+ENERGY_EAT = 3
 AGE_FISH = 5
 AGE_SHARK = 10
+FISH = 1
+SHARK = -1
 
 
 class WaTor:
@@ -22,9 +24,19 @@ class WaTor:
 
         self.energy_eat = int(energy_eat)
 
+        self._moved = numpy.empty(self.shape, dtype=numpy.bool)
+
     @property
     def shape(self):
         return self.creatures.shape
+
+    @property
+    def height(self):
+        return self.shape[0]
+
+    @property
+    def width(self):
+        return self.shape[1]
 
     def create_creatures(self, creatures, shape, nfish, nsharks):
         if isinstance(creatures, numpy.ndarray):
@@ -77,20 +89,82 @@ class WaTor:
     def count_sharks(self):
         return (self.creatures < 0).sum()
 
-    def move_fish(self):
-        for ij in self.cells():
-            if self.is_fish(*ij):
-                ...
+    def north(self, i, j):
+        return (i - 1) % self.height, j
 
-                self.creatures[ij] += 1
+    def south(self, i, j):
+        return (i + 1) % self.height, j
+
+    def west(self, i, j):
+        return i, (j - 1) % self.width
+
+    def east(self, i, j):
+        return i, (j + 1) % self.width
+
+    def _move_one_creature(self, i, j, creature):
+        targets = []
+        if creature == SHARK:
+            if self.is_fish(*self.north(i, j)):
+                targets.append(self.north(i, j))
+            if self.is_fish(*self.south(i, j)):
+                targets.append(self.south(i, j))
+            if self.is_fish(*self.west(i, j)):
+                targets.append(self.west(i, j))
+            if self.is_fish(*self.east(i, j)):
+                targets.append(self.east(i, j))
+        if not targets:
+            if self.is_empty(*self.north(i, j)):
+                targets.append(self.north(i, j))
+            if self.is_empty(*self.south(i, j)):
+                targets.append(self.south(i, j))
+            if self.is_empty(*self.west(i, j)):
+                targets.append(self.west(i, j))
+            if self.is_empty(*self.east(i, j)):
+                targets.append(self.east(i, j))
+
+        if creature == SHARK:
+            self.energies[i, j] -= 1
+        if targets:
+            # numpy.random.choice cannot choose from list of tuples
+            # ValueError: a must be 1-dimensional
+            target = targets[numpy.random.choice(len(targets))]
+            is_fish = self.is_fish(*target)
+            if self.should_breed(i, j):
+                self.creatures[target] = creature
+                self.creatures[i, j] = creature
+                self._moved[i, j] = True
+            else:
+                self.creatures[target] = self.creatures[i, j] + creature
+                self.creatures[i, j] = 0
+            self._moved[target] = True
+
+            if creature == SHARK:
+                self.energies[target] = self.energies[i, j]
+                print(self.energies[target])
+                if is_fish:
+                    self.energies[target] += self.energy_eat
+        else:
+            self._moved[i, j] = True
+            if not self.should_breed(i, j):
+                self.creatures[i, j] += creature
+
+    def move_one_fish(self, i, j):
+        return self._move_one_creature(i, j, FISH)
+
+    def move_one_shark(self, i, j):
+        return self._move_one_creature(i, j, SHARK)
+
+    def move_fish(self):
+        self._moved[::] = False
+        for ij in self.cells():
+            if self.is_fish(*ij) and not self.is_moved(*ij):
+                self.move_one_fish(*ij)
 
     def move_sharks(self):
+        self._moved[::] = False
         for ij in self.cells():
-            if self.is_shark(*ij):
-                ...
-
-                self.energies[ij] -= 1
-                self.creatures[ij] -= 1
+            if self.is_shark(*ij) and not self.is_moved(*ij):
+                self.move_one_shark(*ij)
 
     def remove_dead_sharks(self):
         for ij in self.cells():
@@ -103,12 +177,21 @@ class WaTor:
     def is_shark(self, i, j):
         return self.creatures[i, j] < 0
 
+    def is_empty(self, i, j):
+        return self.creatures[i, j] == 0
+
     def is_dead(self, i, j):
         return self.energies[i, j] <= 0
 
+    def is_moved(self, i, j):
+        return self._moved[i, j]
+
+    def should_breed(self, i, j):
+        return not (-self.age_shark <= self.creatures[i, j] <= self.age_fish)
+
     def cells(self):
-        for i in range(self.shape[0]):
-            for j in range(self.shape[1]):
+        for i in range(self.height):
+            for j in range(self.width):
                 yield i, j
 
     def tick(self):

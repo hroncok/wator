@@ -1,5 +1,7 @@
 import numpy
 
+from . import _cwator
+
 
 ENERGY_INITIAL = 5
 ENERGY_EAT = 3
@@ -51,25 +53,8 @@ class WaTor:
         return self.random_population(shape, nfish, nsharks)
 
     def random_population(self, shape, nfish, nsharks):
-        c = numpy.zeros(shape, dtype=numpy.int8)
-        empties = c.size - nfish - nsharks
-        if empties < 0:
-            raise ValueError('too many creatures for small shape')
-        for i in range(shape[0]):
-            for j in range(shape[1]):
-                rand = numpy.random.randint(empties + nfish + nsharks)
-                if rand < empties:
-                    empties -= 1
-                elif rand < empties + nfish:
-                    c[i, j] = numpy.random.randint(1, self.age_fish + 1)
-                    nfish -= 1
-                else:
-                    c[i, j] = -numpy.random.randint(1, self.age_shark + 1)
-                    nsharks -= 1
-        assert not empties
-        assert not nfish
-        assert not nsharks
-        return c
+        return _cwator.random_population(shape, nfish, nsharks,
+                                         self.age_fish, self.age_shark)
 
     @classmethod
     def create_energies(cls, energy_initial, energies, shape):

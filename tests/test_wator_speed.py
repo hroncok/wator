@@ -3,14 +3,14 @@ import pytest
 
 from wator import WaTor
 
-SIZE = 1024
+SIZE = 2048
 SHAPE = (SIZE, SIZE)
 N = SIZE ** 2 // 3
 
 
-@pytest.mark.timeout(10)
+@pytest.mark.timeout(5)
 def test_random_geenerator_speed():
-    for i in range(5):
+    for i in range(25):
         wator = WaTor(shape=SHAPE, nfish=N, nsharks=N)
         print(i)
         assert wator.count_fish() == N

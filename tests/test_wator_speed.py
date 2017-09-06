@@ -10,7 +10,7 @@ N = SIZE ** 2 // 3
 
 @pytest.mark.timeout(5)
 def test_random_geenerator_speed():
-    for i in range(25):
+    for i in range(20):
         wator = WaTor(shape=SHAPE, nfish=N, nsharks=N)
         print(i)
         assert wator.count_fish() == N

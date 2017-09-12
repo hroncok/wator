@@ -32,6 +32,6 @@ def wator():
 
 @pytest.mark.timeout(60)
 def test_tick_speed(wator):
-    for i in range(5):
+    for i in range(4):
         wator.tick()
         print(i)

@@ -30,8 +30,8 @@ def wator():
                  energies=numpy.copy(WATOR.energies))
 
 
-@pytest.mark.timeout(10)
+@pytest.mark.timeout(60)
 def test_tick_speed(wator):
-    for i in range(10):
+    for i in range(5):
         wator.tick()
         print(i)

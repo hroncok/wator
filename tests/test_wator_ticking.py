@@ -79,3 +79,15 @@ def test_fish_move_over_border():
     # warning: theoretically this might not happen,
     # but statistically it will happen
     assert wator.creatures[:, -1].any()
+
+
+def test_shark_energy_is_properly_risen():
+    creatures = numpy.ones((1, 2))  # 2 fish
+    creatures[0, 0] = -1  # turn a fish into a shark
+    energy_initial = 5
+    energy_eat = 20
+    wator = WaTor(creatures, energy_initial=energy_initial,
+                  energy_eat=energy_eat)
+    assert wator.energies[0, 0] == energy_initial
+    wator.tick()
+    assert wator.energies[0, 1] == energy_initial + energy_eat - 1

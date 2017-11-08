@@ -25,6 +25,33 @@ def test_shape():
     assert ((wator.creatures >= -10) & (wator.creatures <= 5)).all()
 
 
+def test_shape_full_of_fish():
+    shape = (16, 16)
+    wator = WaTor(shape=shape, nfish=16 * 16, nsharks=0)
+    print(wator.creatures)
+    assert wator.count_fish() == 16 * 16
+    assert wator.count_sharks() == 0
+
+
+def test_shape_full_of_shark():
+    shape = (16, 16)
+    wator = WaTor(shape=shape, nfish=0, nsharks=16 * 16)
+    print(wator.creatures)
+    assert wator.count_fish() == 0
+    assert wator.count_sharks() == 16 * 16
+
+
+def test_shape_full_of_something():
+    shape = (16, 16)
+    total = 16*16
+    nfish = total // 5
+    nsharks = total - nfish
+    wator = WaTor(shape=shape, nfish=nfish, nsharks=nsharks)
+    print(wator.creatures)
+    assert wator.count_fish() == nfish
+    assert wator.count_sharks() == nsharks
+
+
 def test_shape_custom_age():
     shape = (16, 16)
     age_fish = 2

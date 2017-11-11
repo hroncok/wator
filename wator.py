@@ -106,26 +106,22 @@ class WaTor:
     def east(self, i, j):
         return i, (j + 1) % self.width
 
+    @property
+    def directions(self):
+        return {self.north, self.south, self.west, self.east}
+
     def _move_one_creature(self, i, j, creature):
         targets = []
         if creature == SHARK:
-            if self.is_fish(*self.north(i, j)):
-                targets.append(self.north(i, j))
-            if self.is_fish(*self.south(i, j)):
-                targets.append(self.south(i, j))
-            if self.is_fish(*self.west(i, j)):
-                targets.append(self.west(i, j))
-            if self.is_fish(*self.east(i, j)):
-                targets.append(self.east(i, j))
+            for direction in self.directions:
+                newpos = direction(i, j)
+                if self.is_fish(*newpos):
+                    targets.append(newpos)
         if not targets:
-            if self.is_empty(*self.north(i, j)):
-                targets.append(self.north(i, j))
-            if self.is_empty(*self.south(i, j)):
-                targets.append(self.south(i, j))
-            if self.is_empty(*self.west(i, j)):
-                targets.append(self.west(i, j))
-            if self.is_empty(*self.east(i, j)):
-                targets.append(self.east(i, j))
+            for direction in self.directions:
+                newpos = direction(i, j)
+                if self.is_empty(*newpos):
+                    targets.append(newpos)
 
         if creature == SHARK:
             self.energies[i, j] -= 1

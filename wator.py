@@ -50,11 +50,6 @@ class WaTor:
                              'you need to define all')
         return self.random_population(shape, nfish, nsharks)
 
-    @classmethod
-    def random_cell(cls, shape):
-        return (numpy.random.randint(shape[0]),
-                numpy.random.randint(shape[1]))
-
     def random_population(self, shape, nfish, nsharks):
         c = numpy.zeros(shape, dtype=numpy.int8)
         empties = c.size - nfish - nsharks

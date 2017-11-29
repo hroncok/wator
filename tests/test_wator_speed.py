@@ -9,7 +9,7 @@ N = SIZE ** 2 // 3
 
 
 @pytest.mark.timeout(5)
-def test_random_geenerator_speed():
+def test_random_generator_speed():
     for i in range(20):
         wator = WaTor(shape=SHAPE, nfish=N, nsharks=N)
         print(i)

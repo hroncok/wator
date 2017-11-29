@@ -4,8 +4,9 @@ WaTor for `MI-PYT <https://github.com/cvut/MI-PYT>`__
 Running tests
 -------------
 
- 1. In your virtual environment, install pytest, numpy: ``python -m pip install pytest numpy``.
- 2. Run ``python -m pytest tests/``.
+ 1. In your virtual environment, install requirements: ``python -m pip install -r requirements.txt``.
+ 2. Compile with ``python setup.py develop`` or ``build_ext -i`` etc.
+ 3. Run ``python -m pytest tests/``.
 
 
 License

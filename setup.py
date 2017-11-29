@@ -4,7 +4,6 @@ import numpy
 
 setup(
     name='wator',
-    name='maze',
     ext_modules=cythonize('wator/_cwator.pyx'),
     include_dirs=[numpy.get_include()],
     install_requires=[

@@ -10,8 +10,8 @@ setup(
         'Cython',
         'NumPy',
     ],
-    license='MIT',
+    license='Public Domain',
     classifiers=[
-        'License :: OSI Approved :: MIT License',
+        'License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication',
     ]
 )
